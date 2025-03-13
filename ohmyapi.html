@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计图展示</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+    <script src="echarts.js"></script>
+</head>
+
+<body>
+
+    <h1>统计图展示页面</h1>
+
+    <h2>折线图</h2>
+    <div>api日用访问量在此展示</div>
+
+    <h2>折线图</h2>
+    <div>api月用访问量趋势在次展示</div>
+    <div id="demo1" style="width: 600px;height: 400px;"></div>
+    <script>
+        var mychart = echarts.init(document.querySelector('#demo1'))
+        var option = {
+            title: {
+                text: "十二月至三月访问人数走势（试）"
+            },
+            tooltip: {},
+            legend: {
+                data: ['访问数']
+            },
+            xAxis: {
+                data: ['十二月', '一月', '二月', '三月']
+            },
+            yAxis: {},
+            series: [
+                {
+                    data: [15, 34, 5, 30],
+                    name: 'api访问人数',
+                    type: 'line',
+                    smooth: true,
+                    lineStyle: {
+                        color: 'red',
+                        width: '3',
+                        type: 'solid'
+
+                    }
+                }
+            ]
+        }
+        mychart.setOption(option)
+
+
+
+    </script>
+
+    <h2>折线图</h2>
+    <div>内容将在此显示</div>
+
+</body>
+
+</html>
