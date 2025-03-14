@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        fetch("apiperday.json")
+    .then(response => {
+        console.log("状态码:", response.status);  // 查看 HTTP 状态码
+        console.log("返回的 Content-Type:", response.headers.get("Content-Type")); // 查看返回的数据类型
+
+        if (!response.ok) {
+            throw new Error("网络错误: " + response.status);
+        }
+
+        return response.text();  // 先用 text() 读取内容
+    })
+    .then(text => {
+        console.log("服务器返回的原始数据:", text);  // 打印服务器返回的内容
+        
+        try {
+            const data = JSON.parse(text);  // 尝试解析 JSON
+            console.log("解析后的 JSON 数据:", data); // 打印最终的 JSON 数据
+        } catch (error) {
+            console.error("JSON 解析错误:", error);
+        }
+    })
+    .catch(error => console.error("数据加载失败:", error));
+
+    </script>
+</body>
+</html>

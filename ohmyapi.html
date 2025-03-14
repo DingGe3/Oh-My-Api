@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>统计图展示</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
-    <script src="echarts.js"></script>
 </head>
 
 <body>
@@ -14,7 +13,51 @@
     <h1>统计图展示页面</h1>
 
     <h2>折线图</h2>
-    <div>api日用访问量在此展示</div>
+    <div id="chart" style="width: 600px; height: 400px;"></div>
+    <script>
+        var mychart = document.getElementById('chart')
+        var perday = echarts.init(mychart)
+
+        fetch("/apiperday.json")
+            .then(response => response.json())
+            .then(data => {
+                let dates = data.map(item => item["时间"]);
+
+                let formattedDates = dates.map(date => {
+            let dateObj = new Date(date); 
+            let month = dateObj.getMonth() + 1; 
+            let day = dateObj.getDate(); 
+            return month + '-' + day;
+        });
+                let gpt4o = data.map(item => item["gpt-4o"]);
+                let chatgpt4oLatest = data.map(item => item["chatgpt-4o-latest"]);
+                let claude37Sonnet = data.map(item => item["claude-3-7-sonnet-20250219"]);
+                let claude3Haiku = data.map(item => item["claude-3-haiku-20240307"]);
+                let deepseekR1 = data.map(item => item["deepseek-r1"]);
+                let deepseekV3 = data.map(item => item["deepseek-v3"]);
+                let gemini15Pro = data.map(item => item["gemini-1.5-pro"]);
+                let geminiPro15 = data.map(item => item["gemini-pro-1.5"]);
+
+                let option = {
+                    title:{text:"三月日访问量"},
+                    tooltip:{trigger:'axis'},
+                    legend: {
+                        data: ['gpt-4o', 'chatgpt-4o-latest', 'claude-3-7-sonnet', 'claude-3-haiku', 'deepseek-r1', 'deepseek-v3', 'gemini-1.5-pro', 'gemini-pro-1.5']
+                                                     },
+                    xAxis:{type:'category',data:formattedDates},
+                    yAxis:{type:'value'},
+                    series:[{ name: 'gpt-4o', type: 'line', data: gpt4o },
+                            { name: 'chatgpt-4o-latest', type: 'line', data: chatgpt4oLatest },
+                            { name: 'claude-3-7-sonnet', type: 'line', data: claude37Sonnet },
+                            { name: 'claude-3-haiku', type: 'line', data: claude3Haiku },
+                            { name: 'deepseek-r1', type: 'line', data: deepseekR1 },
+                            { name: 'deepseek-v3', type: 'line', data: deepseekV3 },
+                            { name: 'gemini-1.5-pro', type: 'line', data: gemini15Pro },
+                            { name: 'gemini-pro-1.5', type: 'line', data: geminiPro15 }]
+                }
+                perday.setOption(option);
+            })
+    </script>
 
     <h2>折线图</h2>
     <div>api月用访问量趋势在次展示</div>
