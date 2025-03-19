@@ -5,15 +5,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oh My Api</title>
+    <style>
+        .nav{
+            height: 40px;
+            background: #333;
+            box-shadow: 0 1px 2px #666;
+            z-index: 1000;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            list-style: none;
+        }
+        .btli{
+            float: left;
+            width: 100px;
+            line-height: 40px;
+            text-align: center;
+            position: relative;
+        }
+        .navlist a{
+            color: #fff;
+            display: block;
+        }
+        .navlist a:hover{
+            background-color: #666
+        }
+        .droplist{
+            position: absolute;
+            background: #333;
+            box-shadow: 0 1px 2px #333;
+            display: none;
+            z-index: 1001;
+        }
+        .btli:hover .droplist{
+            display: block;
+        }
+        .droplist li{
+            border-top: 1px solid #666;
+        }
+        .content, .chart {
+    display: none;
+        }
+        .active {
+    display: block;
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
 </head>
 
 <body>
+    <div>
+        <h1>Oh My Api</h1>
+        <h2>点击下方查看内容</h2>
+    </div>
+    <div class="nav">
+        <ul class="navlist">
+            <li class="btli"><a href="#">关于我们</a>
+                <ul class="droplist">
+                    <li><a href="#" onclick="showcontent('xiangdao')">项导文档</a></li>
+                    <li><a href="#" onclick="showcontent('shiyong')">使用API</a></li>
+                </ul>
+            </li>
+            <li class="btli"><a href="#">使用统计</a>
+                 <ul class="droplist">
+                    <li><a href="#" onclick="showcontent('chart')">本月统计</a></li>
+                    <li><a href="#" onclick="showcontent('demo1')">往月统计</a></li>
+                    <li><a href="#" onclick="showcontent('ip1')">IP日统计</a></li>
+                    <li><a href="#" onclick="showcontent('ip2')">ip月统计</a></li>
+                </ul>
+            </li>
+            <li class="btli"><a href="#">导航项</a></li>
+        </ul>
+    </div>
 
-    <h1>Api使用情况统计</h1>
+    <div id="xiangdao" class="content">
+        <h1>点此进入项导文档</h1>
+        <button onclick="location.assign('https://docs.pguide.studio/')">项导文档</button>
+    </div>
 
-    <h2>访问数情况</h2>
-    <div id="chart" style="width: 900px; height: 600px;"></div>
+    <div id="shiyong" class="content">
+        <h1>在此使用Api</h1>
+        <button onclick="location.assign('https://docs.pguide.studio/public-service/GPT/')">GPT API公用调用网站及应用部署集合</button>
+    </div>
+
+
+    <div id="chart" class="chart" style="width: 900px; height: 600px;"></div>
     <script>
         var mychart = document.getElementById('chart')
         var perday = echarts.init(mychart)
@@ -70,8 +148,7 @@
             })
     </script>
 
-    <h2>折线图</h2>
-    <div id="demo1" style="width: 900px;height: 600px;"></div>
+    <div id="demo1" class="chart" style="width: 900px;height: 600px;"></div>
     <script>
         var mychart2 = document.getElementById('demo1')
         var perday2 = echarts.init(mychart2)
@@ -97,7 +174,7 @@
                 let geminiPro15 = data.map(item => item["gemini-pro-1.5"]);
 
                 let option = {
-                    title:{text:"月访问量",
+                    title:{text:"往月访问量",
                      textStyle:{
                         color:'rgb(255, 0, 0)',
                         fontWeight: 'bold'
@@ -128,8 +205,648 @@
             })
     </script>
 
-    <h2>折线图</h2>
-    <div>内容将在此显示</div>
+    <script>
+        function showcontent(contentId) {
+            // 隐藏所有内容
+            document.querySelectorAll('.content, .chart').forEach(function(element) {
+                element.classList.remove('active');
+            });
+
+            // 显示选中的内容
+            document.getElementById(contentId).classList.add('active');
+        }
+    </script>
+
+
+    <div id="ip1" class="chart" style="width: 900px;height: 600px;"></div>
+    <script>
+        var ipchart1 = document.getElementById('ip1');
+        var ipperday = echarts.init(ipchart1);
+    
+        fetch("./ipperday.json")
+            .then(response => response.json())
+            .then(data => {
+                let dates = data.map(item => item["时间"]);
+    
+                let formattedDates = dates.map(date => {
+                    let dateObj = new Date(date); 
+                    let month = dateObj.getMonth() + 1; 
+                    let day = dateObj.getDate(); 
+                    return month + '-' + day;
+                });
+    
+                // 提取各个IP地址的数据
+                let ip1 = data.map(item => item["1.162.0.28"]);
+                let ip2 = data.map(item => item["1.165.81.210"]);
+                let ip3 = data.map(item => item["103.151.173.102"]);
+                let ip4 = data.map(item => item["103.151.173.197"]);
+                let ip5 = data.map(item => item["103.151.173.95"]);
+                let ip6 = data.map(item => item["104.251.224.21"]);
+                let ip7 = data.map(item => item["104.251.224.22"]);
+                let ip8 = data.map(item => item["129.150.35.142"]);
+                let ip9 = data.map(item => item["134.185.81.235"]);
+                let ip10 = data.map(item => item["138.2.70.153"]);
+                let ip11 = data.map(item => item["138.2.70.248"]);
+                let ip12 = data.map(item => item["140.245.44.84"]);
+                let ip13 = data.map(item => item["140.245.60.79"]);
+                let ip14 = data.map(item => item["140.245.99.131"]);
+                let ip15 = data.map(item => item["157.254.154.46"]);
+                let ip16 = data.map(item => item["158.178.238.1"]);
+                let ip17 = data.map(item => item["16.162.254.237"]);
+                let ip18 = data.map(item => item["18.162.62.79"]);
+                let ip19 = data.map(item => item["183.227.11.37"]);
+                let ip20 = data.map(item => item["185.74.222.113"]);
+                let ip21 = data.map(item => item["217.142.185.226"]);
+                let ip22 = data.map(item => item["222.178.10.202"]);
+                let ip23 = data.map(item => item["222.178.10.233"]);
+                let ip24 = data.map(item => item["23.142.200.93"]);
+                let ip25 = data.map(item => item["2a06:98c0:3600::103"]);
+                let ip26 = data.map(item => item["31.192.233.129"]);
+                let ip27 = data.map(item => item["31.223.184.30"]);
+                let ip28 = data.map(item => item["39.144.219.183"]);
+                let ip29 = data.map(item => item["43.243.192.97"]);
+                let ip30 = data.map(item => item["43.255.118.56"]);
+                let ip31 = data.map(item => item["5.180.78.52"]);
+                let ip32 = data.map(item => item["91.199.84.60"]);
+    
+                let option = {
+                    title: {
+                        text: "三月访问记录",
+                        textStyle: {
+                            color: 'rgb(255, 0, 0)',
+                            fontWeight: 'bold'
+                        },
+                    },
+                    tooltip: { trigger: 'axis' },
+                    legend: {
+                        data: [
+                            '1.162.0.28', '1.165.81.210', '103.151.173.102', '103.151.173.197', 
+                            '103.151.173.95', '104.251.224.21', '104.251.224.22', '129.150.35.142', 
+                            '134.185.81.235', '138.2.70.153', '138.2.70.248', '140.245.44.84', 
+                            '140.245.60.79', '140.245.99.131', '157.254.154.46', '158.178.238.1', 
+                            '16.162.254.237', '18.162.62.79', '183.227.11.37', '185.74.222.113', 
+                            '217.142.185.226', '222.178.10.202', '222.178.10.233', '23.142.200.93', 
+                            '2a06:98c0:3600::103', '31.192.233.129', '31.223.184.30', '39.144.219.183', 
+                            '43.243.192.97', '43.255.118.56', '5.180.78.52', '91.199.84.60'
+                        ],
+                        top: '5%'
+                    },
+                    grid: {
+                        top: '30%'  // 将整个图表下移20%
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: formattedDates
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        { name: '1.162.0.28', type: 'line', data: ip1 },
+                        { name: '1.165.81.210', type: 'line', data: ip2 },
+                        { name: '103.151.173.102', type: 'line', data: ip3 },
+                        { name: '103.151.173.197', type: 'line', data: ip4 },
+                        { name: '103.151.173.95', type: 'line', data: ip5 },
+                        { name: '104.251.224.21', type: 'line', data: ip6 },
+                        { name: '104.251.224.22', type: 'line', data: ip7 },
+                        { name: '129.150.35.142', type: 'line', data: ip8 },
+                        { name: '134.185.81.235', type: 'line', data: ip9 },
+                        { name: '138.2.70.153', type: 'line', data: ip10 },
+                        { name: '138.2.70.248', type: 'line', data: ip11 },
+                        { name: '140.245.44.84', type: 'line', data: ip12 },
+                        { name: '140.245.60.79', type: 'line', data: ip13 },
+                        { name: '140.245.99.131', type: 'line', data: ip14 },
+                        { name: '157.254.154.46', type: 'line', data: ip15 },
+                        { name: '158.178.238.1', type: 'line', data: ip16 },
+                        { name: '16.162.254.237', type: 'line', data: ip17 },
+                        { name: '18.162.62.79', type: 'line', data: ip18 },
+                        { name: '183.227.11.37', type: 'line', data: ip19 },
+                        { name: '185.74.222.113', type: 'line', data: ip20 },
+                        { name: '217.142.185.226', type: 'line', data: ip21 },
+                        { name: '222.178.10.202', type: 'line', data: ip22 },
+                        { name: '222.178.10.233', type: 'line', data: ip23 },
+                        { name: '23.142.200.93', type: 'line', data: ip24 },
+                        { name: '2a06:98c0:3600::103', type: 'line', data: ip25 },
+                        { name: '31.192.233.129', type: 'line', data: ip26 },
+                        { name: '31.223.184.30', type: 'line', data: ip27 },
+                        { name: '39.144.219.183', type: 'line', data: ip28 },
+                        { name: '43.243.192.97', type: 'line', data: ip29 },
+                        { name: '43.255.118.56', type: 'line', data: ip30 },
+                        { name: '5.180.78.52', type: 'line', data: ip31 },
+                        { name: '91.199.84.60', type: 'line', data: ip32 }
+                    ]
+                };
+                
+                ipperday.setOption(option);
+            });
+    </script>
+
+        <div id="ip1" class="chart" style="width: 900px;height: 600px;"></div>
+    <script>
+        var ipchart1 = document.getElementById('ip1');
+        var ipperday = echarts.init(ipchart1);
+    
+        fetch("./ipperday.json")
+            .then(response => response.json())
+            .then(data => {
+                let dates = data.map(item => item["时间"]);
+    
+                let formattedDates = dates.map(date => {
+                    let dateObj = new Date(date); 
+                    let month = dateObj.getMonth() + 1; 
+                    let day = dateObj.getDate(); 
+                    return month + '-' + day;
+                });
+    
+                // 提取各个IP地址的数据
+                let ip1 = data.map(item => item["1.162.0.28"]);
+                let ip2 = data.map(item => item["1.165.81.210"]);
+                let ip3 = data.map(item => item["103.151.173.102"]);
+                let ip4 = data.map(item => item["103.151.173.197"]);
+                let ip5 = data.map(item => item["103.151.173.95"]);
+                let ip6 = data.map(item => item["104.251.224.21"]);
+                let ip7 = data.map(item => item["104.251.224.22"]);
+                let ip8 = data.map(item => item["129.150.35.142"]);
+                let ip9 = data.map(item => item["134.185.81.235"]);
+                let ip10 = data.map(item => item["138.2.70.153"]);
+                let ip11 = data.map(item => item["138.2.70.248"]);
+                let ip12 = data.map(item => item["140.245.44.84"]);
+                let ip13 = data.map(item => item["140.245.60.79"]);
+                let ip14 = data.map(item => item["140.245.99.131"]);
+                let ip15 = data.map(item => item["157.254.154.46"]);
+                let ip16 = data.map(item => item["158.178.238.1"]);
+                let ip17 = data.map(item => item["16.162.254.237"]);
+                let ip18 = data.map(item => item["18.162.62.79"]);
+                let ip19 = data.map(item => item["183.227.11.37"]);
+                let ip20 = data.map(item => item["185.74.222.113"]);
+                let ip21 = data.map(item => item["217.142.185.226"]);
+                let ip22 = data.map(item => item["222.178.10.202"]);
+                let ip23 = data.map(item => item["222.178.10.233"]);
+                let ip24 = data.map(item => item["23.142.200.93"]);
+                let ip25 = data.map(item => item["2a06:98c0:3600::103"]);
+                let ip26 = data.map(item => item["31.192.233.129"]);
+                let ip27 = data.map(item => item["31.223.184.30"]);
+                let ip28 = data.map(item => item["39.144.219.183"]);
+                let ip29 = data.map(item => item["43.243.192.97"]);
+                let ip30 = data.map(item => item["43.255.118.56"]);
+                let ip31 = data.map(item => item["5.180.78.52"]);
+                let ip32 = data.map(item => item["91.199.84.60"]);
+    
+                let option = {
+                    title: {
+                        text: "三月访问记录",
+                        textStyle: {
+                            color: 'rgb(255, 0, 0)',
+                            fontWeight: 'bold'
+                        },
+                    },
+                    tooltip: { trigger: 'axis' },
+                    legend: {
+                        data: [
+                            '1.162.0.28', '1.165.81.210', '103.151.173.102', '103.151.173.197', 
+                            '103.151.173.95', '104.251.224.21', '104.251.224.22', '129.150.35.142', 
+                            '134.185.81.235', '138.2.70.153', '138.2.70.248', '140.245.44.84', 
+                            '140.245.60.79', '140.245.99.131', '157.254.154.46', '158.178.238.1', 
+                            '16.162.254.237', '18.162.62.79', '183.227.11.37', '185.74.222.113', 
+                            '217.142.185.226', '222.178.10.202', '222.178.10.233', '23.142.200.93', 
+                            '2a06:98c0:3600::103', '31.192.233.129', '31.223.184.30', '39.144.219.183', 
+                            '43.243.192.97', '43.255.118.56', '5.180.78.52', '91.199.84.60'
+                        ],
+                        top: '5%'
+                    },
+                    grid: {
+                        top: '30%'  // 将整个图表下移20%
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: formattedDates
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        { name: '1.162.0.28', type: 'line', data: ip1 },
+                        { name: '1.165.81.210', type: 'line', data: ip2 },
+                        { name: '103.151.173.102', type: 'line', data: ip3 },
+                        { name: '103.151.173.197', type: 'line', data: ip4 },
+                        { name: '103.151.173.95', type: 'line', data: ip5 },
+                        { name: '104.251.224.21', type: 'line', data: ip6 },
+                        { name: '104.251.224.22', type: 'line', data: ip7 },
+                        { name: '129.150.35.142', type: 'line', data: ip8 },
+                        { name: '134.185.81.235', type: 'line', data: ip9 },
+                        { name: '138.2.70.153', type: 'line', data: ip10 },
+                        { name: '138.2.70.248', type: 'line', data: ip11 },
+                        { name: '140.245.44.84', type: 'line', data: ip12 },
+                        { name: '140.245.60.79', type: 'line', data: ip13 },
+                        { name: '140.245.99.131', type: 'line', data: ip14 },
+                        { name: '157.254.154.46', type: 'line', data: ip15 },
+                        { name: '158.178.238.1', type: 'line', data: ip16 },
+                        { name: '16.162.254.237', type: 'line', data: ip17 },
+                        { name: '18.162.62.79', type: 'line', data: ip18 },
+                        { name: '183.227.11.37', type: 'line', data: ip19 },
+                        { name: '185.74.222.113', type: 'line', data: ip20 },
+                        { name: '217.142.185.226', type: 'line', data: ip21 },
+                        { name: '222.178.10.202', type: 'line', data: ip22 },
+                        { name: '222.178.10.233', type: 'line', data: ip23 },
+                        { name: '23.142.200.93', type: 'line', data: ip24 },
+                        { name: '2a06:98c0:3600::103', type: 'line', data: ip25 },
+                        { name: '31.192.233.129', type: 'line', data: ip26 },
+                        { name: '31.223.184.30', type: 'line', data: ip27 },
+                        { name: '39.144.219.183', type: 'line', data: ip28 },
+                        { name: '43.243.192.97', type: 'line', data: ip29 },
+                        { name: '43.255.118.56', type: 'line', data: ip30 },
+                        { name: '5.180.78.52', type: 'line', data: ip31 },
+                        { name: '91.199.84.60', type: 'line', data: ip32 }
+                    ]
+                };
+                
+                ipperday.setOption(option);
+            });
+    </script>
+
+        <div id="ip1" class="chart" style="width: 900px;height: 600px;"></div>
+    <script>
+        var ipchart1 = document.getElementById('ip1');
+        var ipperday = echarts.init(ipchart1);
+    
+        fetch("./ipperday.json")
+            .then(response => response.json())
+            .then(data => {
+                let dates = data.map(item => item["时间"]);
+    
+                let formattedDates = dates.map(date => {
+                    let dateObj = new Date(date); 
+                    let month = dateObj.getMonth() + 1; 
+                    let day = dateObj.getDate(); 
+                    return month + '-' + day;
+                });
+    
+                // 提取各个IP地址的数据
+                let ip1 = data.map(item => item["1.162.0.28"]);
+                let ip2 = data.map(item => item["1.165.81.210"]);
+                let ip3 = data.map(item => item["103.151.173.102"]);
+                let ip4 = data.map(item => item["103.151.173.197"]);
+                let ip5 = data.map(item => item["103.151.173.95"]);
+                let ip6 = data.map(item => item["104.251.224.21"]);
+                let ip7 = data.map(item => item["104.251.224.22"]);
+                let ip8 = data.map(item => item["129.150.35.142"]);
+                let ip9 = data.map(item => item["134.185.81.235"]);
+                let ip10 = data.map(item => item["138.2.70.153"]);
+                let ip11 = data.map(item => item["138.2.70.248"]);
+                let ip12 = data.map(item => item["140.245.44.84"]);
+                let ip13 = data.map(item => item["140.245.60.79"]);
+                let ip14 = data.map(item => item["140.245.99.131"]);
+                let ip15 = data.map(item => item["157.254.154.46"]);
+                let ip16 = data.map(item => item["158.178.238.1"]);
+                let ip17 = data.map(item => item["16.162.254.237"]);
+                let ip18 = data.map(item => item["18.162.62.79"]);
+                let ip19 = data.map(item => item["183.227.11.37"]);
+                let ip20 = data.map(item => item["185.74.222.113"]);
+                let ip21 = data.map(item => item["217.142.185.226"]);
+                let ip22 = data.map(item => item["222.178.10.202"]);
+                let ip23 = data.map(item => item["222.178.10.233"]);
+                let ip24 = data.map(item => item["23.142.200.93"]);
+                let ip25 = data.map(item => item["2a06:98c0:3600::103"]);
+                let ip26 = data.map(item => item["31.192.233.129"]);
+                let ip27 = data.map(item => item["31.223.184.30"]);
+                let ip28 = data.map(item => item["39.144.219.183"]);
+                let ip29 = data.map(item => item["43.243.192.97"]);
+                let ip30 = data.map(item => item["43.255.118.56"]);
+                let ip31 = data.map(item => item["5.180.78.52"]);
+                let ip32 = data.map(item => item["91.199.84.60"]);
+    
+                let option = {
+                    title: {
+                        text: "三月访问记录",
+                        textStyle: {
+                            color: 'rgb(255, 0, 0)',
+                            fontWeight: 'bold'
+                        },
+                    },
+                    tooltip: { trigger: 'axis' },
+                    legend: {
+                        data: [
+                            '1.162.0.28', '1.165.81.210', '103.151.173.102', '103.151.173.197', 
+                            '103.151.173.95', '104.251.224.21', '104.251.224.22', '129.150.35.142', 
+                            '134.185.81.235', '138.2.70.153', '138.2.70.248', '140.245.44.84', 
+                            '140.245.60.79', '140.245.99.131', '157.254.154.46', '158.178.238.1', 
+                            '16.162.254.237', '18.162.62.79', '183.227.11.37', '185.74.222.113', 
+                            '217.142.185.226', '222.178.10.202', '222.178.10.233', '23.142.200.93', 
+                            '2a06:98c0:3600::103', '31.192.233.129', '31.223.184.30', '39.144.219.183', 
+                            '43.243.192.97', '43.255.118.56', '5.180.78.52', '91.199.84.60'
+                        ],
+                        top: '5%'
+                    },
+                    grid: {
+                        top: '30%'  // 将整个图表下移20%
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: formattedDates
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        { name: '1.162.0.28', type: 'line', data: ip1 },
+                        { name: '1.165.81.210', type: 'line', data: ip2 },
+                        { name: '103.151.173.102', type: 'line', data: ip3 },
+                        { name: '103.151.173.197', type: 'line', data: ip4 },
+                        { name: '103.151.173.95', type: 'line', data: ip5 },
+                        { name: '104.251.224.21', type: 'line', data: ip6 },
+                        { name: '104.251.224.22', type: 'line', data: ip7 },
+                        { name: '129.150.35.142', type: 'line', data: ip8 },
+                        { name: '134.185.81.235', type: 'line', data: ip9 },
+                        { name: '138.2.70.153', type: 'line', data: ip10 },
+                        { name: '138.2.70.248', type: 'line', data: ip11 },
+                        { name: '140.245.44.84', type: 'line', data: ip12 },
+                        { name: '140.245.60.79', type: 'line', data: ip13 },
+                        { name: '140.245.99.131', type: 'line', data: ip14 },
+                        { name: '157.254.154.46', type: 'line', data: ip15 },
+                        { name: '158.178.238.1', type: 'line', data: ip16 },
+                        { name: '16.162.254.237', type: 'line', data: ip17 },
+                        { name: '18.162.62.79', type: 'line', data: ip18 },
+                        { name: '183.227.11.37', type: 'line', data: ip19 },
+                        { name: '185.74.222.113', type: 'line', data: ip20 },
+                        { name: '217.142.185.226', type: 'line', data: ip21 },
+                        { name: '222.178.10.202', type: 'line', data: ip22 },
+                        { name: '222.178.10.233', type: 'line', data: ip23 },
+                        { name: '23.142.200.93', type: 'line', data: ip24 },
+                        { name: '2a06:98c0:3600::103', type: 'line', data: ip25 },
+                        { name: '31.192.233.129', type: 'line', data: ip26 },
+                        { name: '31.223.184.30', type: 'line', data: ip27 },
+                        { name: '39.144.219.183', type: 'line', data: ip28 },
+                        { name: '43.243.192.97', type: 'line', data: ip29 },
+                        { name: '43.255.118.56', type: 'line', data: ip30 },
+                        { name: '5.180.78.52', type: 'line', data: ip31 },
+                        { name: '91.199.84.60', type: 'line', data: ip32 }
+                    ]
+                };
+                
+                ipperday.setOption(option);
+            });
+    </script>
+
+        <div id="ip1" class="chart" style="width: 900px;height: 600px;"></div>
+    <script>
+        var ipchart1 = document.getElementById('ip1');
+        var ipperday = echarts.init(ipchart1);
+    
+        fetch("./ipperday.json")
+            .then(response => response.json())
+            .then(data => {
+                let dates = data.map(item => item["时间"]);
+    
+                let formattedDates = dates.map(date => {
+                    let dateObj = new Date(date); 
+                    let month = dateObj.getMonth() + 1; 
+                    let day = dateObj.getDate(); 
+                    return month + '-' + day;
+                });
+    
+                // 提取各个IP地址的数据
+                let ip1 = data.map(item => item["1.162.0.28"]);
+                let ip2 = data.map(item => item["1.165.81.210"]);
+                let ip3 = data.map(item => item["103.151.173.102"]);
+                let ip4 = data.map(item => item["103.151.173.197"]);
+                let ip5 = data.map(item => item["103.151.173.95"]);
+                let ip6 = data.map(item => item["104.251.224.21"]);
+                let ip7 = data.map(item => item["104.251.224.22"]);
+                let ip8 = data.map(item => item["129.150.35.142"]);
+                let ip9 = data.map(item => item["134.185.81.235"]);
+                let ip10 = data.map(item => item["138.2.70.153"]);
+                let ip11 = data.map(item => item["138.2.70.248"]);
+                let ip12 = data.map(item => item["140.245.44.84"]);
+                let ip13 = data.map(item => item["140.245.60.79"]);
+                let ip14 = data.map(item => item["140.245.99.131"]);
+                let ip15 = data.map(item => item["157.254.154.46"]);
+                let ip16 = data.map(item => item["158.178.238.1"]);
+                let ip17 = data.map(item => item["16.162.254.237"]);
+                let ip18 = data.map(item => item["18.162.62.79"]);
+                let ip19 = data.map(item => item["183.227.11.37"]);
+                let ip20 = data.map(item => item["185.74.222.113"]);
+                let ip21 = data.map(item => item["217.142.185.226"]);
+                let ip22 = data.map(item => item["222.178.10.202"]);
+                let ip23 = data.map(item => item["222.178.10.233"]);
+                let ip24 = data.map(item => item["23.142.200.93"]);
+                let ip25 = data.map(item => item["2a06:98c0:3600::103"]);
+                let ip26 = data.map(item => item["31.192.233.129"]);
+                let ip27 = data.map(item => item["31.223.184.30"]);
+                let ip28 = data.map(item => item["39.144.219.183"]);
+                let ip29 = data.map(item => item["43.243.192.97"]);
+                let ip30 = data.map(item => item["43.255.118.56"]);
+                let ip31 = data.map(item => item["5.180.78.52"]);
+                let ip32 = data.map(item => item["91.199.84.60"]);
+    
+                let option = {
+                    title: {
+                        text: "三月访问记录",
+                        textStyle: {
+                            color: 'rgb(255, 0, 0)',
+                            fontWeight: 'bold'
+                        },
+                    },
+                    tooltip: { trigger: 'axis' },
+                    legend: {
+                        data: [
+                            '1.162.0.28', '1.165.81.210', '103.151.173.102', '103.151.173.197', 
+                            '103.151.173.95', '104.251.224.21', '104.251.224.22', '129.150.35.142', 
+                            '134.185.81.235', '138.2.70.153', '138.2.70.248', '140.245.44.84', 
+                            '140.245.60.79', '140.245.99.131', '157.254.154.46', '158.178.238.1', 
+                            '16.162.254.237', '18.162.62.79', '183.227.11.37', '185.74.222.113', 
+                            '217.142.185.226', '222.178.10.202', '222.178.10.233', '23.142.200.93', 
+                            '2a06:98c0:3600::103', '31.192.233.129', '31.223.184.30', '39.144.219.183', 
+                            '43.243.192.97', '43.255.118.56', '5.180.78.52', '91.199.84.60'
+                        ],
+                        top: '5%'
+                    },
+                    grid: {
+                        top: '30%'  // 将整个图表下移20%
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: formattedDates
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        { name: '1.162.0.28', type: 'line', data: ip1 },
+                        { name: '1.165.81.210', type: 'line', data: ip2 },
+                        { name: '103.151.173.102', type: 'line', data: ip3 },
+                        { name: '103.151.173.197', type: 'line', data: ip4 },
+                        { name: '103.151.173.95', type: 'line', data: ip5 },
+                        { name: '104.251.224.21', type: 'line', data: ip6 },
+                        { name: '104.251.224.22', type: 'line', data: ip7 },
+                        { name: '129.150.35.142', type: 'line', data: ip8 },
+                        { name: '134.185.81.235', type: 'line', data: ip9 },
+                        { name: '138.2.70.153', type: 'line', data: ip10 },
+                        { name: '138.2.70.248', type: 'line', data: ip11 },
+                        { name: '140.245.44.84', type: 'line', data: ip12 },
+                        { name: '140.245.60.79', type: 'line', data: ip13 },
+                        { name: '140.245.99.131', type: 'line', data: ip14 },
+                        { name: '157.254.154.46', type: 'line', data: ip15 },
+                        { name: '158.178.238.1', type: 'line', data: ip16 },
+                        { name: '16.162.254.237', type: 'line', data: ip17 },
+                        { name: '18.162.62.79', type: 'line', data: ip18 },
+                        { name: '183.227.11.37', type: 'line', data: ip19 },
+                        { name: '185.74.222.113', type: 'line', data: ip20 },
+                        { name: '217.142.185.226', type: 'line', data: ip21 },
+                        { name: '222.178.10.202', type: 'line', data: ip22 },
+                        { name: '222.178.10.233', type: 'line', data: ip23 },
+                        { name: '23.142.200.93', type: 'line', data: ip24 },
+                        { name: '2a06:98c0:3600::103', type: 'line', data: ip25 },
+                        { name: '31.192.233.129', type: 'line', data: ip26 },
+                        { name: '31.223.184.30', type: 'line', data: ip27 },
+                        { name: '39.144.219.183', type: 'line', data: ip28 },
+                        { name: '43.243.192.97', type: 'line', data: ip29 },
+                        { name: '43.255.118.56', type: 'line', data: ip30 },
+                        { name: '5.180.78.52', type: 'line', data: ip31 },
+                        { name: '91.199.84.60', type: 'line', data: ip32 }
+                    ]
+                };
+                
+                ipperday.setOption(option);
+            });
+    </script>
+        <div id="ip2" class="chart" style="width: 900px;height: 600px;"></div>
+        <script>
+            var ipchart2 = document.getElementById('ip2');
+            var ippermonth = echarts.init(ipchart2);
+        
+            fetch("./ippermonth.json")
+                .then(response => response.json())
+                .then(data => {
+                    let dates = data.map(item => item["时间"]);
+        
+                    let formattedDates = dates.map(date => {
+                        let dateObj = new Date(date); 
+                        let month = dateObj.getMonth() + 1; 
+                        let day = dateObj.getDate(); 
+                        return month + '-' + day;
+                    });
+        
+                    // 提取各个IP地址的数据
+                    let ip1 = data.map(item => item["1.162.0.28"]);
+                    let ip2 = data.map(item => item["1.165.81.210"]);
+                    let ip3 = data.map(item => item["103.151.173.102"]);
+                    let ip4 = data.map(item => item["103.151.173.197"]);
+                    let ip5 = data.map(item => item["103.151.173.95"]);
+                    let ip6 = data.map(item => item["104.251.224.21"]);
+                    let ip7 = data.map(item => item["104.251.224.22"]);
+                    let ip8 = data.map(item => item["129.150.35.142"]);
+                    let ip9 = data.map(item => item["134.185.81.235"]);
+                    let ip10 = data.map(item => item["138.2.70.153"]);
+                    let ip11 = data.map(item => item["138.2.70.248"]);
+                    let ip12 = data.map(item => item["140.245.44.84"]);
+                    let ip13 = data.map(item => item["140.245.60.79"]);
+                    let ip14 = data.map(item => item["140.245.99.131"]);
+                    let ip15 = data.map(item => item["157.254.154.46"]);
+                    let ip16 = data.map(item => item["158.178.238.1"]);
+                    let ip17 = data.map(item => item["16.162.254.237"]);
+                    let ip18 = data.map(item => item["18.162.62.79"]);
+                    let ip19 = data.map(item => item["183.227.11.37"]);
+                    let ip20 = data.map(item => item["185.74.222.113"]);
+                    let ip21 = data.map(item => item["217.142.185.226"]);
+                    let ip22 = data.map(item => item["222.178.10.202"]);
+                    let ip23 = data.map(item => item["222.178.10.233"]);
+                    let ip24 = data.map(item => item["23.142.200.93"]);
+                    let ip25 = data.map(item => item["2a06:98c0:3600::103"]);
+                    let ip26 = data.map(item => item["31.192.233.129"]);
+                    let ip27 = data.map(item => item["31.223.184.30"]);
+                    let ip28 = data.map(item => item["39.144.219.183"]);
+                    let ip29 = data.map(item => item["43.243.192.97"]);
+                    let ip30 = data.map(item => item["43.255.118.56"]);
+                    let ip31 = data.map(item => item["5.180.78.52"]);
+                    let ip32 = data.map(item => item["91.199.84.60"]);
+        
+                    let option = {
+                        title: {
+                            text: "往月访问记录",
+                            textStyle: {
+                                color: 'rgb(255, 0, 0)',
+                                fontWeight: 'bold'
+                            },
+                        },
+                        tooltip: { trigger: 'axis' },
+                        legend: {
+                            data: [
+                                '1.162.0.28', '1.165.81.210', '103.151.173.102', '103.151.173.197', 
+                                '103.151.173.95', '104.251.224.21', '104.251.224.22', '129.150.35.142', 
+                                '134.185.81.235', '138.2.70.153', '138.2.70.248', '140.245.44.84', 
+                                '140.245.60.79', '140.245.99.131', '157.254.154.46', '158.178.238.1', 
+                                '16.162.254.237', '18.162.62.79', '183.227.11.37', '185.74.222.113', 
+                                '217.142.185.226', '222.178.10.202', '222.178.10.233', '23.142.200.93', 
+                                '2a06:98c0:3600::103', '31.192.233.129', '31.223.184.30', '39.144.219.183', 
+                                '43.243.192.97', '43.255.118.56', '5.180.78.52', '91.199.84.60'
+                            ],
+                            top: '5%'
+                        },
+                        grid: {
+                            top: '35%'  // 将整个图表下移20%
+                        },
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: formattedDates
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [
+                            { name: '1.162.0.28', type: 'line', data: ip1 },
+                            { name: '1.165.81.210', type: 'line', data: ip2 },
+                            { name: '103.151.173.102', type: 'line', data: ip3 },
+                            { name: '103.151.173.197', type: 'line', data: ip4 },
+                            { name: '103.151.173.95', type: 'line', data: ip5 },
+                            { name: '104.251.224.21', type: 'line', data: ip6 },
+                            { name: '104.251.224.22', type: 'line', data: ip7 },
+                            { name: '129.150.35.142', type: 'line', data: ip8 },
+                            { name: '134.185.81.235', type: 'line', data: ip9 },
+                            { name: '138.2.70.153', type: 'line', data: ip10 },
+                            { name: '138.2.70.248', type: 'line', data: ip11 },
+                            { name: '140.245.44.84', type: 'line', data: ip12 },
+                            { name: '140.245.60.79', type: 'line', data: ip13 },
+                            { name: '140.245.99.131', type: 'line', data: ip14 },
+                            { name: '157.254.154.46', type: 'line', data: ip15 },
+                            { name: '158.178.238.1', type: 'line', data: ip16 },
+                            { name: '16.162.254.237', type: 'line', data: ip17 },
+                            { name: '18.162.62.79', type: 'line', data: ip18 },
+                            { name: '183.227.11.37', type: 'line', data: ip19 },
+                            { name: '185.74.222.113', type: 'line', data: ip20 },
+                            { name: '217.142.185.226', type: 'line', data: ip21 },
+                            { name: '222.178.10.202', type: 'line', data: ip22 },
+                            { name: '222.178.10.233', type: 'line', data: ip23 },
+                            { name: '23.142.200.93', type: 'line', data: ip24 },
+                            { name: '2a06:98c0:3600::103', type: 'line', data: ip25 },
+                            { name: '31.192.233.129', type: 'line', data: ip26 },
+                            { name: '31.223.184.30', type: 'line', data: ip27 },
+                            { name: '39.144.219.183', type: 'line', data: ip28 },
+                            { name: '43.243.192.97', type: 'line', data: ip29 },
+                            { name: '43.255.118.56', type: 'line', data: ip30 },
+                            { name: '5.180.78.52', type: 'line', data: ip31 },
+                            { name: '91.199.84.60', type: 'line', data: ip32 }
+                        ]
+                    };
+                    
+                    ippermonth.setOption(option);
+                });
+        </script>
+
+
+    
+
+
+
+    
+
+    
+
+
 
 </body>
 

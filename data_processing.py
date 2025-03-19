@@ -67,12 +67,20 @@ ds_others['月份'] = ds_others['时间'].dt.month
 
 result = ds.groupby(["时间", "模型"])["访问次数"].sum().reset_index() #：对一日内同一API的访问次数进行统计
 result_other = ds_others.groupby(["月份","模型"])["访问次数"].sum().reset_index()#：按月份进行统计
+ip_result1 = ds.groupby(["时间", "IP"])["访问次数"].sum().reset_index()
+ip_result2 = ds_others.groupby(["月份","IP"])["访问次数"].sum().reset_index()
 
 l_result = result.pivot(index="时间", columns="模型", values="访问次数").fillna(0)
 l_result_month = result_other.pivot(index="月份",columns="模型",values="访问次数").fillna(0)
+ip_result_day = ip_result1.pivot(index="时间",columns="IP",values="访问次数").fillna(0)
+ip_result_month = ip_result2.pivot(index="月份",columns="IP",values="访问次数").fillna(0)
 # 直接保存为CSV
 l_result.to_csv("apiperday.csv")
 l_result_month.to_csv("apipermonth.csv")
+ip_result_day.to_csv("ipperday.csv")
+ip_result_month.to_csv("ippermonth.csv")
+
+
 
 
 
@@ -95,3 +103,15 @@ data_json = dm.to_dict(orient="records")
 # 保存为JSON文件
 with open("apipermonth.json", "w", encoding="utf-8") as f:
     json.dump(data_json, f, ensure_ascii=False, indent=4)
+
+di1 = pd.read_csv("ipperday.csv")
+di1 = di1.astype(str)
+data_json = di1.to_dict(orient="records")
+with open("ipperday.json","w",encoding="utf-8") as f:
+    json.dump(data_json,f,ensure_ascii=False,indent=4)
+
+di2 = pd.read_csv("ippermonth.csv")
+di2 = di2.astype(str)
+data_json = di2.to_dict(orient="records")
+with open("ippermonth.json","w",encoding="utf-8") as f:
+    json.dump(data_json,f,ensure_ascii=False,indent=4)
