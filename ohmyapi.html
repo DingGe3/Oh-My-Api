@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oh My Api</title>
+
+    <style>
+        h1{
+            text-align: center;
+        }
+    </style>
     <style>
         .nav{
             height: 40px;
@@ -58,7 +64,7 @@
 <body>
     <div>
         <h1>Oh My Api</h1>
-        <h2>点击下方查看内容</h2>
+        <h4>点击下方查看内容</h4>
     </div>
     <div class="nav">
         <ul class="navlist">
@@ -92,15 +98,15 @@
     </div>
 
 
-    <div id="chart" class="chart" style="width: 900px; height: 600px;"></div>
+    <div id="chart" class="chart" style="width: 1200px; height: 600px; margin-left: 150px;"></div>
 
-    <div id="deepseek" class="chart" style="width: 900px; height: 600px;"></div>
+    <div id="deepseek" class="chart" style="width: 1200px; height: 600px; margin-left: 150px;"></div>
 
     <script>
         var dsApril = document.getElementById('deepseek')
         var dsday = echarts.init(dsApril)
 
-        fetch("./deepseekday.json")
+        fetch("./data_processed/deepseekday.json")
         .then(response => response.json())
             .then(data => {
                 let dates = data.map(item => item["时间"]);
@@ -148,7 +154,7 @@
         var mychart = document.getElementById('chart')
         var perday = echarts.init(mychart)
 
-        fetch("./apiperday.json")
+        fetch("./data_processed/apiperday.json")
             .then(response => response.json())
             .then(data => {
                 let dates = data.map(item => item["时间"]);
@@ -170,42 +176,51 @@
 
                 let option = {
                     title:{text:"三月日访问量",
+                    textAlign:'center',
+                    left:'center',
                      textStyle:{
-                        color:'rgb(255, 0, 0)',
+                        fontSize: 30,
+                        color:'rgb(255, 0,0 )',
                         fontWeight: 'bold'
                     },
                 },
                     tooltip:{trigger:'axis'},
                     legend: {
-                        data: ['gpt-4o', 'chatgpt-4o-latest', 'claude-3-7-sonnet', 'claude-3-haiku', 'deepseek-r1', 'deepseek-v3', 'gemini-1.5-pro', 'gemini-pro-1.5'],
+                        right:80,
+                        top:'50%',
+                        textStyle:{fontSize: 20},
+                        orient:'vertical',
+                        data: ['chatgpt-4o-latest', 'claude-3-7-sonnet', 'gemini-1.5-pro', 'gemini-pro-1.5', 'claude-3-haiku', 'deepseek-v3', 'deepseek-r1', 'gpt-4o'] ,
                         top: '5%'                        },
                     grid: {
                         top: '15%',  // 让整个图表往下移动
                         left: '10%',
-                        right: '10%',
+                        right: '30%',
                         bottom: '15%'
                                                       },
                     xAxis:{type:'category',data:formattedDates},
                     yAxis:{type:'value'},
-                    series:[{ name: 'gpt-4o', type: 'line', data: gpt4o },
-                            { name: 'chatgpt-4o-latest', type: 'line', data: chatgpt4oLatest },
-                            { name: 'claude-3-7-sonnet', type: 'line', data: claude37Sonnet },
-                            { name: 'claude-3-haiku', type: 'line', data: claude3Haiku },
-                            { name: 'deepseek-r1', type: 'line', data: deepseekR1 },
-                            { name: 'deepseek-v3', type: 'line', data: deepseekV3 },
-                            { name: 'gemini-1.5-pro', type: 'line', data: gemini15Pro },
-                            { name: 'gemini-pro-1.5', type: 'line', data: geminiPro15 }]
+                    series:[
+                        { name: 'chatgpt-4o-latest', type: 'line', data: chatgpt4oLatest }, // 长度 18
+                        { name: 'claude-3-7-sonnet', type: 'line', data: claude37Sonnet },  // 长度 17
+                        { name: 'gemini-pro-1.5', type: 'line', data: geminiPro15 },        // 长度 15
+                        { name: 'gemini-1.5-pro', type: 'line', data: gemini15Pro },        // 长度 15
+                        { name: 'claude-3-haiku', type: 'line', data: claude3Haiku },       // 长度 14
+                        { name: 'deepseek-v3', type: 'line', data: deepseekV3 },           // 长度 11
+                        { name: 'deepseek-r1', type: 'line', data: deepseekR1 },           // 长度 11
+                        { name: 'gpt-4o', type: 'line', data: gpt4o }                      // 长度 6
+]
                 }
                 perday.setOption(option);
             })
     </script>
 
-    <div id="demo1" class="chart" style="width: 900px;height: 600px;"></div>
+    <div id="demo1" class="chart" style="width: 1200px; height: 600px; margin-left: 150px;"></div>
     <script>
         var mychart2 = document.getElementById('demo1')
         var perday2 = echarts.init(mychart2)
 
-        fetch("./apipermonth.json")
+        fetch("./data_processed/apipermonth.json")
             .then(response => response.json())
             .then(data => {
                 let dates = data.map(item => item["月份"]);
@@ -270,12 +285,12 @@
     </script>
 
 
-    <div id="ip1" class="chart" style="width: 900px;height: 600px;"></div>
+    <div id="ip1" class="chart" style="width: 1200px; height: 600px; margin-left: 150px;"></div>
     <script>
         var ipchart1 = document.getElementById('ip1');
         var ipperday = echarts.init(ipchart1);
     
-        fetch("./ipperday.json")
+        fetch("./data_processed/ipperday.json")
             .then(response => response.json())
             .then(data => {
                 let dates = data.map(item => item["时间"]);
@@ -396,12 +411,12 @@
 
 
     </script>
-        <div id="ip2" class="chart" style="width: 900px;height: 600px;"></div>
+        <div id="ip2" class="chart" style="width: 1200px; height: 600px; margin-left: 150px;"></div>
         <script>
             var ipchart2 = document.getElementById('ip2');
             var ippermonth = echarts.init(ipchart2);
         
-            fetch("./ippermonth.json")
+            fetch("./data_processed/ippermonth.json")
                 .then(response => response.json())
                 .then(data => {
                     let dates = data.map(item => item["时间"]);
