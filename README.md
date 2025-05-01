@@ -25,6 +25,14 @@ pip install -r requirements.txt
 
 ```
 vue版本项目运行方法：
-cd到backend，运行代码：node index.js启动后端
-新建终端
-cd到frontend，运行代码：npm run dev
+1.安装环境
+确保安装了node.js，并添加到环境变量中
+在终端中frontend目录下安装echarts和vite（运行npm install和npm install echarts）
+2.启动后端和前端
+在backend目录下运行node index.js
+在frontend目录下运行npm run dev
+（在这一步若报错为SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+    则运行代码Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+然后重试）
+3.进入返回的local地址
