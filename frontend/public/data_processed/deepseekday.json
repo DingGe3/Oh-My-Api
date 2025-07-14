@@ -1,17 +1,7 @@
 [
   {
-    "时间": "04-01",
-    "deepseek-chat": "6",
-    "deepseek-reasoner": "4"
-  },
-  {
-    "时间": "04-02",
-    "deepseek-chat": "4",
-    "deepseek-reasoner": "4"
-  },
-  {
-    "时间": "04-03",
-    "deepseek-chat": "4",
-    "deepseek-reasoner": "4"
+    "时间": "2025-07-14",
+    "deepseek-chat": "14",
+    "deepseek-reasoner": "12"
   }
 ]

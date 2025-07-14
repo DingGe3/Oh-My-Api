@@ -42,3 +42,8 @@ vue版本项目运行方法：
 2. 创建数据库（名称为 `ohmyapi`）；
 3. 使用以下命令导入数据库：
 mysql -u root -p < backend/ohmyapi.sql
+
+运行Python处理数据所需的库：
+pandas
+pymysql
+sqlalchemy

@@ -93,7 +93,13 @@ function formatDate(rawDate) {
 }
 
 function generateOption(id, data) {
-  const dates = data.map(d => formatDate(d['时间'] || d['月份']))
+  const timeKey = data[0].时间 ? '时间' : '月份'
+
+  // 🔽 根据时间字段进行排序
+  data.sort((a, b) => new Date(a[timeKey]) - new Date(b[timeKey]))
+
+  const dates = data.map(d => d[timeKey])  // 不再做格式化，保留完整日期
+
   const keys = Object.keys(data[0]).filter(k => k !== '时间' && k !== '月份')
   const series = keys.map(name => ({
     name,
@@ -115,11 +121,19 @@ function generateOption(id, data) {
     tooltip: { trigger: 'axis' },
     legend: { data: keys, top: '5%' },
     grid: { top: '20%', left: '10%', right: '10%', bottom: '15%' },
-    xAxis: { type: 'category', data: dates },
+    xAxis: {
+      type: 'category',
+      data: dates,
+      axisLabel: {
+        rotate: 45, // 可选：斜着显示避免重叠
+        formatter: val => val, // 直接显示 YYYY-MM-DD
+      }
+    },
     yAxis: { type: 'value' },
     series,
   }
 }
+
 
 // 可选：监听容器 resize 自动刷新图表
 onMounted(() => {
